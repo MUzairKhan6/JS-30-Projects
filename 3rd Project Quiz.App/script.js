@@ -34,6 +34,12 @@ const questions = [
       { Text: "pakistan", correct: false },
       { Text: "China", correct: false },
     ] 
+  },
+  {
+    question: "",
+    answer: [
+      {}
+    ]
   }
 ];
 
