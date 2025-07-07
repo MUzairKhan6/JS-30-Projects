@@ -6,7 +6,7 @@ const questions = [
       { Text: "Blue Whale", correct: true },
       { Text: "Elephant", correct: false },
       { Text: "Giraffe", correct: false },
-    ],
+    ]
   },
   {
     question: "Which is the smallest country in the world ?",
@@ -15,7 +15,7 @@ const questions = [
       { Text: "Bhutan", correct: false },
       { Text: "Nepal", correct: false },
       { Text: "Pakistan", correct: false },
-    ],
+    ]
   },
   {
     question: "Who is Keela Man ?",
@@ -24,7 +24,7 @@ const questions = [
       { Text: "Anas", correct: false },
       { Text: "Uzair", correct: false },
       { Text: "Faisal", correct: false },
-    ],
+    ]
   },
   {
     question: "Which country is not a Nuclear Power?",
@@ -33,13 +33,13 @@ const questions = [
       { Text: "America", correct: true },
       { Text: "pakistan", correct: false },
       { Text: "China", correct: false },
-    ],
-  },
+    ] 
+  }
 ];
 
 const questionElement = document.getElementById("question");
-const answerButoons = document.getElementById("answer-button");
-const nextButoon = document.getElementById("next-button");
+const answerButton = document.getElementById("answer-button");
+const nextButton = document.getElementById("next-button");
 
 let currentQuestionIndex = 0;
 let score = 0;
@@ -47,7 +47,7 @@ let score = 0;
 function startQuiz() {
   currentQuestionIndex = 0;
   score = 0;
-  nextButoon.innerHTML = "Next";
+  nextButton.innerHTML = "Next";
   showQuestion();
 }
 
@@ -61,30 +61,61 @@ function showQuestion() {
     const button = document.createElement("button");
     button.innerHTML = answer.Text;
     button.classList.add("btn");
-    answerButoons.appendChild(button);
+    answerButton.appendChild(button);
+
     if (answer.correct) {
       button.dataset.correct = answer.correct;
     }
-    button.addEventListener("click", selsctAnswer);
+    button.addEventListener("click", selectAnswer);
   });
 }
 function resetState() {
-  nextButoon.style.display = "none";
-  while (answerButoons.firstChild) {
-    answerButoons.removeChild(answerButoons.firstChild);
+  nextButton.style.display = "none";
+  while (answerButton.firstChild) {
+    answerButton.removeChild(answerButton.firstChild);
   }
 }
 
-function selsctAnswer(e) {
-  const selectedBtton = e.target;
-  const isCorrect = selectedBtton.dataset.correct === "true";
+function selectAnswer(e) {
+  const selectedButton = e.target;
+  const isCorrect = selectedButton.dataset.correct === "true";
   if (isCorrect) {
-    selectedBtton.classList.add("correct");
+    selectedButton.classList.add("correct");
+    score++;  
   } else {
-    selectedBtton.classList.add("incorrect");
+    selectedButton.classList.add("incorrect");
   }
-
-  Array.from
-
+ 
+  Array.from(answerButton.children).forEach(button => {
+    if (button.dataset.correct === "true") {
+      button.classList.add("correct");
+    }
+    button.disabled = true;
+  });
+  nextButton.style.display = "block";
 }
-startQuiz();
+
+function showScore(){
+  resetState();
+  questionElement.innerHTML = `You scored ${score} out of ${questions.length}!`;
+  nextButton.innerHTML = "Play Again";
+  nextButton.style.display = "block";
+}
+
+function handleNextButton(){
+  currentQuestionIndex++;
+  if(currentQuestionIndex < questions.length){
+    showQuestion();
+  }
+  else{
+    showScore();
+  }
+}
+
+nextButton.addEventListener("click", ()=>{
+  if (currentQuestionIndex < questions.length) {
+    handleNextButton();
+  } else {
+    startQuiz();
+  }
+});
